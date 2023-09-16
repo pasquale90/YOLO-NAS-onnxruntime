@@ -1,7 +1,7 @@
 #!/bin/bash
 CURRENT_DIR=$(cd "$(dirname "$0")"; pwd)
 
-ONNXRUNTIME_VERSION="1.10.0"
+ONNXRUNTIME_VERSION="1.13.1"
 ONNXRUNTIME_GPU=1
 
 # Platform
@@ -72,3 +72,12 @@ cd build
 echo "Build Code ..."
 cmake .. -D ONNXRUNTIME_DIR="${ONNXRUNTIME_DIR}" -DCMAKE_BUILD_TYPE=Release
 cmake --build .
+echo "pwd "${pwd}
+echo "Build Done."
+echo "Run Demo ..."
+./demo
+echo "Demo Done."
+
+# cd build
+# cmake .. -D ONNXRUNTIME_DIR=/home/sonic_dev/Desktop/ResearchersNight/YOLO-NAS-onnxruntime/onnxruntime-linux-x64-gpu-1.10.0 -DCMAKE_BUILD_TYPE=Release
+# cmake --build .
