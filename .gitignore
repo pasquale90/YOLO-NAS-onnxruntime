@@ -64,5 +64,4 @@ models/*
 models/yolo_nas_l_parking_space.onnx
 
 build
-src_vision
 main.cpp

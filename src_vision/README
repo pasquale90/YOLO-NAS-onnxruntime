@@ -1,0 +1,4 @@
+Stuck at building phase with
+make clean
+make
+Undefined reference to Vision::Vision()
