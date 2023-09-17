@@ -18,7 +18,7 @@ private:
     void init();
     void get_classess();
     void load_model(bool isGPU);
-    void postprocess();
+    Detection postprocess(std::vector<Detection>);
     
     YOLODetector detector {nullptr};
 

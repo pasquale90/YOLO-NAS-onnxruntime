@@ -74,7 +74,19 @@ bool YoloNas::inference(cv::Mat& image){
 
     result = detector.detectFrame(image, this->confThres, this->iouThres);
     utils::drawDetectOnFrame(image, result, this->classNames, this->classColors);
+    Detection det = postprocess(result);
 
+    int x = det.box.x;
+    int y = det.box.y;
+    int w = det.box.width;
+    int h = det.box.height;
+    std::cout<<"x: "<<x<<std::endl;
+    std::cout<<"y: "<<y<<std::endl;
+    std::cout<<"w: "<<w<<std::endl;
+    std::cout<<"h: "<<h<<std::endl;
+    std::cout<<std::endl;
+
+    
     cv::imshow("result", image);
     if (cv::waitKey(33) == 'q') {
         return false;
@@ -82,5 +94,21 @@ bool YoloNas::inference(cv::Mat& image){
     return true;
 }
 
-void YoloNas::postprocess(){
+Detection YoloNas::postprocess(std::vector<Detection> detections){
+
+    int max_area=0;
+    Detection max_detection;
+    for (const Detection& detection : detections)
+    {
+        if (classNames[detection.classId] == "person"){
+            
+            if (detection.box.area() > max_area){
+                max_area = detection.box.area();
+                max_detection = detection;
+            }
+        }
+        
+    return max_detection;
+    }
+        
 }
