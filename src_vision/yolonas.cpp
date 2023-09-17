@@ -65,27 +65,16 @@ void YoloNas::load_model(bool isGPU){
 }
 
 bool YoloNas::inference(cv::Mat& image){
-
-    // for (std::string name : classNames)
-    // {
-    //     // classNames.push_back(name);
-    //     std::cout<<"name: "<<name<<std::endl;
-    // }
-
+    
     result = detector.detectFrame(image, this->confThres, this->iouThres);
+
+    return display(image);
+
+}
+
+bool YoloNas::display(cv::Mat image){
+    
     utils::drawDetectOnFrame(image, result, this->classNames, this->classColors);
-    Detection det = postprocess(result);
-
-    int x = det.box.x;
-    int y = det.box.y;
-    int w = det.box.width;
-    int h = det.box.height;
-    std::cout<<"x: "<<x<<std::endl;
-    std::cout<<"y: "<<y<<std::endl;
-    std::cout<<"w: "<<w<<std::endl;
-    std::cout<<"h: "<<h<<std::endl;
-    std::cout<<std::endl;
-
     
     cv::imshow("result", image);
     if (cv::waitKey(33) == 'q') {
@@ -94,21 +83,29 @@ bool YoloNas::inference(cv::Mat& image){
     return true;
 }
 
-Detection YoloNas::postprocess(std::vector<Detection> detections){
-
+std::vector<int> YoloNas::postprocess(){
+    
     int max_area=0;
-    Detection max_detection;
-    for (const Detection& detection : detections)
+    Detection max_det;
+    for (const Detection& detection : result)
     {
         if (classNames[detection.classId] == "person"){
             
             if (detection.box.area() > max_area){
                 max_area = detection.box.area();
-                max_detection = detection;
+                max_det = detection;
             }
         }
-        
-    return max_detection;
     }
-        
+    // int x = det.box.x;
+    // int y = det.box.y;
+    // int w = det.box.width;
+    // int h = det.box.height;
+    std::vector<int> maxAreaPersonBox(4);
+    maxAreaPersonBox.push_back(max_det.box.x);
+    maxAreaPersonBox.push_back(max_det.box.y);
+    maxAreaPersonBox.push_back(max_det.box.x+max_det.box.width);
+    maxAreaPersonBox.push_back(max_det.box.y+max_det.box.height);
+
+    return maxAreaPersonBox;
 }

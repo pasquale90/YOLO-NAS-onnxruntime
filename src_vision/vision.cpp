@@ -56,6 +56,11 @@ void Vision::run_detection(){
         if (!detmodel->inference(image)){
             break;
         }
+
+        std::vector <int> dets = detmodel->postprocess();
+        for(int i=0; i<dets.size(); i++){
+            std::cout<<"Vision::dets: "<<dets[i]<<std::endl;
+        }
         
     }
 }

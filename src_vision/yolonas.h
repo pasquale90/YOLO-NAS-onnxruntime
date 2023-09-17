@@ -13,12 +13,13 @@ public:
     YoloNas(float iou_thres, float conf_thres, bool isGPU);
     ~YoloNas();
     bool inference(cv::Mat& image);
+    std::vector<int> postprocess();
 
 private:
     void init();
     void get_classess();
     void load_model(bool isGPU);
-    Detection postprocess(std::vector<Detection>);
+    bool display(cv::Mat);
     
     YOLODetector detector {nullptr};
 
